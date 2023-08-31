@@ -16,7 +16,6 @@ export const register = async (userData: User) => {
     const userExists: boolean = await isUser(userData.email);
     if (userExists) {
         return errorMessageBuilder(
-            "Add user error", 
             `A user with email ${userData.email} already exists`
         );
     }
