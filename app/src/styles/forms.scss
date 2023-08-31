@@ -1,0 +1,116 @@
+input,
+button {
+  color: var(--primary-font);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+input,
+input:required {
+  width: 100%;
+  margin: .7em;
+  border-bottom: 1px solid var(--highlights);
+  box-sizing: border-box;
+}
+
+label {
+  margin: 5px 0 0 0;
+}
+
+.form-section{
+    @include centered; 
+}
+
+.custom-form {
+  width: 30%;
+  margin: auto;
+  padding: 2em 3em;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--accent-background);
+  border-radius: var(--border-radius);
+  h1 {
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 1.5em;
+    margin-bottom: .5em;
+    img {
+      @include vertical-align;
+      margin: 0;
+      margin-right: 10px;
+      height: 100%;
+      filter: invert(80%);
+      background-size: contain;
+    }
+    span {
+      @include vertical-align;
+      margin: 0;
+      margin-bottom: 10px;
+    }
+  }
+  a {
+    color: var(--primary-font);
+    text-decoration: none;
+    text-align: center;
+    &:hover {
+        text-decoration: underline;
+    }
+  }
+
+  input {
+    @include custom_input;
+    margin-left: 0;
+    margin-right: 0;
+    &:focus {
+      border: 1px solid var(--highlights);
+      border-radius: var(--border-radius);
+      transition: ease-in .5s;
+    }
+    &:focus:required:invalid {
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      outline: none;
+      border: 1px solid var(--error);
+      border-radius: var(--border-radius);
+      transition: ease-in .5s;
+    }
+  }
+}
+
+.primary-button {
+    font-weight: 800;
+    padding: 1.2em;
+    font-size: 1em;
+    border: 1px solid var(--primary-font);
+    border-radius: var(--border-radius);
+    &:hover{
+        background-color: var(--primary-font);
+        color: var(--accent-background);
+        transition: ease-in .5s;
+    }
+}
+
+.error-message {
+    font-size: .8em;
+    margin-bottom: 20px;
+    color: var(--error);
+}
+
+.action-span{
+    margin: 15px 0;
+}
+
+@media (max-width: 600px) {
+  .custom-form {
+    width: 50%;
+  }
+}
+
+@media (max-width: 400px) {
+  .custom-form {
+    width: 70%;
+  }
+}

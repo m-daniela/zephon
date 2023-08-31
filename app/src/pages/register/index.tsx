@@ -79,8 +79,9 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleRegisterSubmit}>
+        <section className="form-section">
+            <form className="custom-form" onSubmit={handleRegisterSubmit}>
+                <h1>Create a new account</h1>
                 <label>Your email</label>
                 <input 
                     type="email" 
@@ -109,11 +110,12 @@ const RegisterPage: React.FC = () => {
                     required 
                     value={formData.retypePassword} 
                     onChange={handleOnChange}/>
-                <button type="submit">Register</button>
                 <span className="error-message">{error}</span>
+                <button className="primary-button" type="submit">Register</button>
+                <span className="action-span">
+                    Already registered? <Link href={routes.login}>Login here</Link></span>
             </form>
-            <span>Already registered? <Link href={routes.login}>Login here</Link></span>
-        </div>
+        </section>
     );
 };
 

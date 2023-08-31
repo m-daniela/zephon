@@ -43,8 +43,9 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleLoginSubmit}>
+        <section className="form-section">
+            <form className="custom-form" onSubmit={handleLoginSubmit}>
+                <h1>Login to continue</h1>
                 <label>Your email</label>
                 <input 
                     type="email" 
@@ -59,11 +60,12 @@ const LoginPage: React.FC = () => {
                     required 
                     value={formData.password} 
                     onChange={handleOnChange}/>
-                <button type="submit">Login</button>
                 <span className="error-message">{error}</span>
+                <button className="primary-button" type="submit">Login</button>
+                <span className="action-span">
+                    New here? <Link href="/register">Create an account.</Link></span>
             </form>
-            <span>New here? <Link href="/register">Create an account.</Link></span>
-        </div>
+        </section>
     );
 };
 
