@@ -6,4 +6,8 @@ export interface User {
     conversations?: string[]
 }
 
+export interface AuthUser extends User {
+    authToken: string
+}
+
 export type FirebaseUser = FbUser;

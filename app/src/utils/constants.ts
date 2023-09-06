@@ -16,5 +16,6 @@ export const errorsToMessage: {
 const url = "http://localhost:5000";
 
 export const apiUrls = {
-    register: `${url}/register`
+    register: `${url}/register`,
+    login: `${url}/login`,
 };

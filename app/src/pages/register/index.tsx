@@ -1,6 +1,6 @@
 import { apiUrls, errorsToMessage, routes } from "@/utils/constants";
 import { registerUser } from "@/utils/firebase/user_signup_login";
-import { User } from "@/utils/types/user_types";
+import { AuthUser, User } from "@/utils/types/user_types";
 import { FirebaseError } from "firebase/app";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -59,12 +59,14 @@ const RegisterPage: React.FC = () => {
             const dbResponse = await registerUserCall({
                 email: response.email, 
                 displayName: formData.displayName
-            } as User);
+            } as AuthUser);
             if (dbResponse.error){
                 setError(dbResponse.error.message);
             }
             else{
                 console.log(dbResponse);
+                // save it in the local storage, for now
+                localStorage.setItem("token", dbResponse.authToken);
             }
         }
         catch(error: unknown){

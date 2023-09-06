@@ -1,8 +1,22 @@
-import { errorsToMessage } from "@/utils/constants";
+import { apiUrls, errorsToMessage } from "@/utils/constants";
 import { loginUser } from "@/utils/firebase/user_signup_login";
 import { FirebaseError } from "firebase/app";
 import Link from "next/link";
 import React, { useState } from "react";
+
+
+const loginUserCall = async (email: string) => {
+    const response = await fetch(
+        apiUrls.login, 
+        {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({email})
+        });
+    return await response.json();
+};
 
 /**
  * Login page
@@ -29,9 +43,13 @@ const LoginPage: React.FC = () => {
         try{
             const response = await loginUser(formData.email, formData.password);
             console.log(response);
-
+            const token = await loginUserCall(formData.email);
+            console.log("token", token);
+            // save it in the local storage, for now
+            localStorage.setItem("token", token.authToken);
         }
         catch(error: unknown){
+            console.log("error", error);
             if (error instanceof FirebaseError) {
                 const errorMessage = errorsToMessage[error.code] ?? error.message;
                 setError(errorMessage);
