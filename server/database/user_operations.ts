@@ -2,6 +2,7 @@ import { FirebaseError } from "@firebase/util";
 import { User } from "../types/user_types";
 import { errorMessageBuilder } from "../utils/functions";
 import { db } from "./config";
+import { generateAccessToken } from "../authentication/authenticate";
 
 
 /**
@@ -10,13 +11,12 @@ import { db } from "./config";
  * database. This is only used to reference the 
  * conversations associated with a user
  * @param userData: User
- * @returns 
+ * @returns user data and the authentication token
  */
 export const register = async (userData: User) => {
     const userExists: boolean = await isUser(userData.email);
     if (userExists) {
         return errorMessageBuilder(
-            "Add user error", 
             `A user with email ${userData.email} already exists`
         );
     }
@@ -24,7 +24,11 @@ export const register = async (userData: User) => {
 
     try{
         await docRef.set(userData);
-        return userData;
+        const authToken = generateAccessToken(userData.email);
+        return {
+            ...userData, 
+            authToken
+        };
     }
     catch(error: unknown){
         if (error instanceof FirebaseError){

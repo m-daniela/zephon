@@ -1,20 +1,13 @@
-import Head from "next/head";
-import { Inter } from "next/font/google";
+import React from "react";
 
-const inter = Inter({ subsets: ["latin"] });
-
+/**  
+ * OBS The home page will not be displayed for now
+ * The user is redirected to the Login page
+*/
 export default function Home() {
     return (
         <>
-            <Head>
-                <title>Zephon</title>
-                <meta name="description" content="E2EE messaging app" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main>
-              initial commit
-            </main>
+            
         </>
     );
 }
