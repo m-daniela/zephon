@@ -5,6 +5,7 @@ import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
+import { addConversation } from "./database/add_data";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -21,7 +22,8 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.post("/auth", authenticateToken, async (req: Request, res: Response) => {
     // for testing purposes
-    await getUsers();
+    // await getUsers();
+    // await addConversation(["a@mail.com"]);
     res.send("server running...");
 });
 
@@ -37,6 +39,15 @@ app.post(endpoints.login, async (req: Request, res: Response) => {
     console.log("server", email);
     const authToken = generateAccessToken(email);
     res.json({authToken});
+});
+
+app.post(endpoints.addConversation, authenticateToken, async (req: Request, res: Response) => {
+    // for testing purposes
+    // await getUsers();
+    console.log(req.body);
+    const conversationData = req.body;
+    const conversation = await addConversation(conversationData);
+    res.json(conversation);
 });
 
 app.listen(port, () => {

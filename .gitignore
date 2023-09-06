@@ -147,3 +147,5 @@ dist
 notes.md
 .env
 zephon_service_account.json
+
+.vscode
