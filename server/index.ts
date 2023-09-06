@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { getUsers } from "./database/get_data";
+import { getConversations, getUsers } from "./database/get_data";
 import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
@@ -42,12 +42,15 @@ app.post(endpoints.login, async (req: Request, res: Response) => {
 });
 
 app.post(endpoints.addConversation, authenticateToken, async (req: Request, res: Response) => {
-    // for testing purposes
-    // await getUsers();
-    console.log(req.body);
     const conversationData = req.body;
     const conversation = await addConversation(conversationData);
     res.json(conversation);
+});
+
+app.post(endpoints.getConversations, authenticateToken, async (req: Request, res: Response) => {
+    const email = req.body.email;
+    const conversations = await getConversations(email);
+    res.json(conversations);
 });
 
 app.listen(port, () => {
