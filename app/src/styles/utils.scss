@@ -1,0 +1,25 @@
+@mixin vertical-align{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@mixin centered{
+    @include vertical-align;
+    height: 100%;
+    margin: auto;
+}
+
+@mixin custom-input{
+    background-color: var(--input-background);
+    margin: 15px;
+    padding: 15px;
+    border: none;
+    border-radius: var(--border-radius);
+    &:focus{
+        background-color: var(--input-highlight);
+    }
+    &:focus-visible{
+        outline-color: var(--input-highlight);
+    }
+}

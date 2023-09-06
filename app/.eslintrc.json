@@ -1,0 +1,36 @@
+{
+  "root": true,
+  "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+  },
+  "extends": [
+      "next/core-web-vitals",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+      "ecmaVersion": "latest"
+  },
+  "plugins": [
+      "@typescript-eslint"
+  ],
+  "rules": {
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "indent": ["error", 4],
+    "max-len": ["error", 100],
+    "no-multi-spaces": ["error"],
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }],
+    "no-unused-vars": "off",
+    "react/prop-types": "off"
+},
+  "ignorePatterns": [
+    "node_modules",
+    "build",
+    "dist",
+    "public"
+  ]
+}
