@@ -6,6 +6,8 @@ import { DBError } from "../utils/errors";
 import { errorMessageBuilder } from "../utils/functions";
 import { db } from "./config";
 import { addConversationToUsers } from "./update_data";
+import { Message } from "../types/message_types";
+import { conversationExists } from "./get_data";
 
 
 /**
@@ -40,4 +42,46 @@ export const addConversation = async (conversationData: Conversation) => {
         }
         return errorMessageBuilder((error as Error).message, (error as Error).stack);
     }
+};
+
+
+/**
+ * Add a message in the conversation
+ * The messages will be added to a collection
+ * inside the conversation document
+ * @param conversationId 
+ * @param messageData 
+ * @returns messageData, with an id
+ */
+export const addMessage = async (conversationId: string, messageData: Message) => {
+
+    const isConversation = await conversationExists(conversationId);
+    if (!isConversation){
+        return errorMessageBuilder(`Could not find conversation ${conversationId}`);
+    }
+
+    const messageRef = db.collection(firebasePaths.messages(conversationId)).doc();
+
+    try{
+        const messageDataWithTimestamp = {
+            ...messageData, 
+            dateSent: FieldValue.serverTimestamp()
+        };
+        await messageRef.set(messageDataWithTimestamp);
+        return {
+            id: messageRef.id, 
+            ...messageData
+        };
+    }
+    catch (error: unknown){
+        if (error instanceof DBError){
+            return errorMessageBuilder(error.message, error.stack);
+        }
+        if (error instanceof FirebaseError){
+            return errorMessageBuilder(
+                `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
+        }
+        return errorMessageBuilder((error as Error).message, (error as Error).stack);
+    }
+
 };

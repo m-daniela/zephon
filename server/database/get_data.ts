@@ -45,3 +45,15 @@ export const getConversations = async (email: string) => {
         return {conversations};
     }
 };
+
+
+/**
+ * Check if the conversation exists
+ * @param conversationId 
+ * @returns true if conversation exists, false otherwise
+ */
+export const conversationExists = async (conversationId: string) => {
+    const conversation = await db.collection(firebasePaths.conversations)
+        .doc(conversationId).get();
+    return conversation.exists;
+};

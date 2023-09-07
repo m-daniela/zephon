@@ -5,7 +5,7 @@ import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
-import { addConversation } from "./database/add_data";
+import { addConversation, addMessage } from "./database/add_data";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -51,6 +51,13 @@ app.post(endpoints.getConversations, authenticateToken, async (req: Request, res
     const email = req.body.email;
     const conversations = await getConversations(email);
     res.json(conversations);
+});
+
+app.post(endpoints.addMessage, authenticateToken, async (req: Request, res: Response) => {
+    const messageData = req.body;
+    const conversationId = req.params.conversationId;
+    const message = await addMessage(conversationId, messageData);
+    res.json(message);
 });
 
 app.listen(port, () => {
