@@ -1,6 +1,6 @@
 
 export interface Conversation {
-    id: string, 
+    id?: string, 
     dateCreated: Date, 
     isEncrypted: boolean, 
     name?: string, 

@@ -3,6 +3,7 @@ import { User } from "../types/user_types";
 import { errorMessageBuilder } from "../utils/functions";
 import { db } from "./config";
 import { generateAccessToken } from "../authentication/authenticate";
+import { firebasePaths } from "../utils/constants";
 
 
 /**
@@ -20,7 +21,7 @@ export const register = async (userData: User) => {
             `A user with email ${userData.email} already exists`
         );
     }
-    const docRef = db.collection("users").doc(userData.email);
+    const docRef = db.collection(firebasePaths.users).doc(userData.email);
 
     try{
         await docRef.set(userData);
@@ -46,7 +47,7 @@ export const register = async (userData: User) => {
  * @returns boolean
  */
 export const isUser = async (email: string): Promise<boolean> => {
-    const userRef = db.collection("users").doc(email);
+    const userRef = db.collection(firebasePaths.users).doc(email);
     const user = await userRef.get();
     return user.exists;
 };
