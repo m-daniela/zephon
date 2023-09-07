@@ -6,3 +6,5 @@ export interface ErrorMessage {
 export interface ErrorMessageResponse {
     error: ErrorMessage
 }
+
+export type DeleteResolve = (value?: void | PromiseLike<void>) => void;
