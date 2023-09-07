@@ -11,11 +11,11 @@ export const endpoints = {
     // conversations
     addConversation: "/conversation", 
     getConversations: "/conversations",
-    updateRemoveConversation: "/conversation/:conversationId", 
+    updateDeleteConversation: "/conversation/:conversationId", 
     // messages
     addMessage: "/conversation/:conversationId/message", 
     getMessages: "/conversation/:conversationId/messages", 
-    removeMessage: "/conversation/:conversationId/message/:messageId", 
+    deleteMessage: "/conversation/:conversationId/message/:messageId", 
 };
 
 export const firebasePaths = {

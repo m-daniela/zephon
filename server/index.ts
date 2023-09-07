@@ -6,6 +6,7 @@ import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
 import { addConversation, addMessage } from "./database/add_data";
+import { deleteMessage } from "./database/delete_data";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -64,6 +65,12 @@ app.get(endpoints.getMessages, authenticateToken, async (req: Request, res: Resp
     const conversationId = req.params.conversationId;
     const messages = await getMessages(conversationId);
     res.json(messages);
+});
+
+app.delete(endpoints.deleteMessage, authenticateToken, async (req: Request, res: Response) => {
+    const {conversationId, messageId} = req.params;
+    const removedMessage = await deleteMessage(conversationId, messageId);
+    res.json(removedMessage);
 });
 
 app.listen(port, () => {

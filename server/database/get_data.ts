@@ -93,3 +93,16 @@ export const getMessages = async (conversationId: string) => {
         messages
     };
 };
+
+
+/**
+ * Check if the message exists
+ * @param conversationId 
+ * @param messageId 
+ * @returns true if message exists, false otherwise
+ */
+export const messageExists = async (conversationId: string, messageId: string) => {
+    const message = await db.collection(firebasePaths.messages(conversationId))
+        .doc(messageId).get();
+    return message.exists;
+};
