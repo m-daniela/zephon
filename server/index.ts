@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { getConversations, getUsers } from "./database/get_data";
+import { getConversations, getMessages, getUsers } from "./database/get_data";
 import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
@@ -58,6 +58,12 @@ app.post(endpoints.addMessage, authenticateToken, async (req: Request, res: Resp
     const conversationId = req.params.conversationId;
     const message = await addMessage(conversationId, messageData);
     res.json(message);
+});
+
+app.get(endpoints.getMessages, authenticateToken, async (req: Request, res: Response) => {
+    const conversationId = req.params.conversationId;
+    const messages = await getMessages(conversationId);
+    res.json(messages);
 });
 
 app.listen(port, () => {
