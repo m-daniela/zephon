@@ -1,7 +1,7 @@
 
 
 export interface Message {
-    id: string, 
+    id?: string, 
     dateSent: Date, 
     sender: string, 
     isAttachment: boolean, 

@@ -1,11 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { getConversations, getUsers } from "./database/get_data";
+import { getConversations, getMessages, getUsers } from "./database/get_data";
 import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
 import { User } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
-import { addConversation } from "./database/add_data";
+import { addConversation, addMessage } from "./database/add_data";
+import { deleteMessage } from "./database/delete_data";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -51,6 +52,25 @@ app.post(endpoints.getConversations, authenticateToken, async (req: Request, res
     const email = req.body.email;
     const conversations = await getConversations(email);
     res.json(conversations);
+});
+
+app.post(endpoints.addMessage, authenticateToken, async (req: Request, res: Response) => {
+    const messageData = req.body;
+    const conversationId = req.params.conversationId;
+    const message = await addMessage(conversationId, messageData);
+    res.json(message);
+});
+
+app.get(endpoints.getMessages, authenticateToken, async (req: Request, res: Response) => {
+    const conversationId = req.params.conversationId;
+    const messages = await getMessages(conversationId);
+    res.json(messages);
+});
+
+app.delete(endpoints.deleteMessage, authenticateToken, async (req: Request, res: Response) => {
+    const {conversationId, messageId} = req.params;
+    const removedMessage = await deleteMessage(conversationId, messageId);
+    res.json(removedMessage);
 });
 
 app.listen(port, () => {

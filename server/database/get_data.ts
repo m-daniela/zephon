@@ -4,6 +4,7 @@ import { firebasePaths } from "../utils/constants";
 import { errorMessageBuilder } from "../utils/functions";
 import { db } from "./config";
 import { Conversation } from "../types/conversation_types";
+import { Message } from "../types/message_types";
 
 export const getUsers = async () => {
     const snapshot = await db.collection("users").get();
@@ -44,4 +45,64 @@ export const getConversations = async (email: string) => {
         });
         return {conversations};
     }
+};
+
+
+/**
+ * Check if the conversation exists
+ * @param conversationId 
+ * @returns true if conversation exists, false otherwise
+ */
+export const conversationExists = async (conversationId: string) => {
+    const conversation = await db.collection(firebasePaths.conversations)
+        .doc(conversationId).get();
+    return conversation.exists;
+};
+
+
+/**
+ * 
+ * @param conversationId 
+ * @returns conversationId and the associated messages
+{
+    conversationId, 
+    messages {
+        messageId: {
+            id: messageId,
+            ...messageData
+        }
+    }
+}
+ */
+export const getMessages = async (conversationId: string) => {
+    const isConversation = await conversationExists(conversationId);
+    if (!isConversation){
+        return errorMessageBuilder(`Could not find conversation ${conversationId}`);
+    }
+    const messages: {[key: string]: Message} = {};
+    const messagesSnapshot = await db.collection(firebasePaths.messages(conversationId)).get();
+    messagesSnapshot.forEach(message => {
+        messages[message.id] = {
+            id: message.id, 
+            ...message.data()
+        } as Message;
+    });
+
+    return {
+        conversationId, 
+        messages
+    };
+};
+
+
+/**
+ * Check if the message exists
+ * @param conversationId 
+ * @param messageId 
+ * @returns true if message exists, false otherwise
+ */
+export const messageExists = async (conversationId: string, messageId: string) => {
+    const message = await db.collection(firebasePaths.messages(conversationId))
+        .doc(messageId).get();
+    return message.exists;
 };

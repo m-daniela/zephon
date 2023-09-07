@@ -11,12 +11,18 @@ export const endpoints = {
     // conversations
     addConversation: "/conversation", 
     getConversations: "/conversations",
-    updateRemoveConversation: (conversationId: string) => `/conversation/${conversationId}`, 
+    updateDeleteConversation: "/conversation/:conversationId", 
+    // messages
+    addMessage: "/conversation/:conversationId/message", 
+    getMessages: "/conversation/:conversationId/messages", 
+    deleteMessage: "/conversation/:conversationId/message/:messageId", 
 };
 
 export const firebasePaths = {
     // users
     users: "users",
     // conversations
-    conversations: "conversations"
+    conversations: "conversations",
+    // messages
+    messages: (conversationId: string) => `conversations/${conversationId}/messages`
 };
