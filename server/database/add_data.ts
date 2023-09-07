@@ -22,7 +22,7 @@ export const addConversation = async (conversationData: Conversation) => {
     try {
         await addConversationToUsers(conversationData.participants, conversationRef.id as string);
         const conversationWithTimestamp = {
-            createdAt: FieldValue.serverTimestamp(), 
+            dateCreated: FieldValue.serverTimestamp(), 
             // timestamp: FieldValue.serverTimestamp(), 
             ...conversationData
         };

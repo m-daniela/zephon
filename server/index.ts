@@ -7,6 +7,7 @@ import { User } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
 import { addConversation, addMessage } from "./database/add_data";
 import { deleteConversationWrapper, deleteMessage } from "./database/delete_data";
+import { updateConversation } from "./database/update_data";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -59,6 +60,14 @@ app.delete(endpoints.updateDeleteConversation, authenticateToken,
         const conversationId = req.params.conversationId;
         const removedConversation = await deleteConversationWrapper(conversationId);
         res.json(removedConversation);
+    });
+
+app.put(endpoints.updateDeleteConversation, authenticateToken, 
+    async (req: Request, res: Response) => {
+        const conversationId = req.params.conversationId;
+        const conversationData = req.body;
+        const conversation = await updateConversation(conversationId, conversationData);
+        res.json(conversation);
     });
 
 app.post(endpoints.addMessage, authenticateToken, async (req: Request, res: Response) => {

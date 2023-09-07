@@ -1,7 +1,7 @@
 
 export interface Conversation {
     id?: string, 
-    dateCreated: Date, 
+    dateCreated?: Date, 
     isEncrypted: boolean, 
     name?: string, 
     participants: string[], 
