@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const url = process.env.URL;
-console.log(url);
+export const batchSize = 100;
 
 export const endpoints = {
     // users
