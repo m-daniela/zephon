@@ -8,3 +8,5 @@ export interface ErrorMessage {
 export interface ErrorMessageResponse {
     error: ErrorMessage
 }
+
+export type AuthTokenType = null | undefined | string;

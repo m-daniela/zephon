@@ -2,7 +2,6 @@ import { FirebaseError } from "@firebase/util";
 import { User } from "../types/user_types";
 import { errorMessageBuilder } from "../utils/functions";
 import { db } from "./config";
-import { generateAccessToken } from "../authentication/authenticate";
 import { firebasePaths } from "../utils/constants";
 
 
@@ -25,18 +24,13 @@ export const register = async (userData: User) => {
 
     try{
         await docRef.set(userData);
-        const authToken = generateAccessToken(userData.email);
-        return {
-            ...userData, 
-            authToken
-        };
     }
     catch(error: unknown){
         if (error instanceof FirebaseError){
             return errorMessageBuilder(
                 `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
         }
-        return error;
+        return errorMessageBuilder(`${error}`);
     }
 };
 

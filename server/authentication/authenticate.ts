@@ -10,7 +10,6 @@ dotenv.config();
  * @returns JWT token
  */
 export const generateAccessToken = (email: string) => {
-    console.log(process.env.TOKEN_SECRET);
     return jwt.sign({email}, process.env.TOKEN_SECRET as string, { expiresIn: "24h" });
 };
 

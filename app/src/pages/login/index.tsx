@@ -1,26 +1,15 @@
-import { apiUrls, errorsToMessage } from "@/utils/constants";
+import { useAuthContext } from "@/context/AuthenticationProvider";
+import { loginUserCall } from "@/utils/apiCalls/user_operations";
+import { errorsToMessage, routes } from "@/utils/constants";
 import { loginUser } from "@/utils/firebase/user_signup_login";
 import { FirebaseError } from "firebase/app";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-
-const loginUserCall = async (email: string) => {
-    const response = await fetch(
-        apiUrls.login, 
-        {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({email})
-        });
-    return await response.json();
-};
 
 /**
  * Login page
- * TODO: save the token
  */
 const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -28,6 +17,14 @@ const LoginPage: React.FC = () => {
         password: "", 
     });
     const [error, setError] = useState("");
+    const {login, token} = useAuthContext();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (token) {
+            router.push(routes.home);
+        }
+    }, [token, router]);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
@@ -45,8 +42,8 @@ const LoginPage: React.FC = () => {
             console.log(response);
             const token = await loginUserCall(formData.email);
             console.log("token", token);
-            // save it in the local storage, for now
-            localStorage.setItem("token", token.authToken);
+            login(token.authToken);
+            router.push(routes.home);
         }
         catch(error: unknown){
             console.log("error", error);

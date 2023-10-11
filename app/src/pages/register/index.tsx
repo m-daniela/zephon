@@ -1,33 +1,17 @@
-import { apiUrls, errorsToMessage, routes } from "@/utils/constants";
+import { useAuthContext } from "@/context/AuthenticationProvider";
+import { registerUserCall } from "@/utils/apiCalls/user_operations";
+import { errorsToMessage, routes } from "@/utils/constants";
 import { registerUser } from "@/utils/firebase/user_signup_login";
-import { AuthUser, User } from "@/utils/types/user_types";
+import { AuthUser } from "@/utils/types/user_types";
 import { FirebaseError } from "firebase/app";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-
-/**
- * Save the user in the database as well
- * @param user 
- * @returns user data | error message
- */
-const registerUserCall = async (user: User) => {
-    const response = await fetch(
-        apiUrls.register, 
-        {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify(user)
-        });
-    return await response.json();
-};
 
 /**
  * Registration page
  * TODO: check password strength
- * TODO: save the token
  * @returns 
  */
 const RegisterPage: React.FC = () => {
@@ -38,6 +22,14 @@ const RegisterPage: React.FC = () => {
         retypePassword: "", 
     });
     const [error, setError] = useState("");
+    const {login, token} = useAuthContext();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (token) {
+            router.push(routes.home);
+        }
+    }, [token, router]);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
@@ -65,8 +57,8 @@ const RegisterPage: React.FC = () => {
             }
             else{
                 console.log(dbResponse);
-                // save it in the local storage, for now
-                localStorage.setItem("token", dbResponse.authToken);
+                login(dbResponse.authToken);
+                router.push(routes.home);
             }
         }
         catch(error: unknown){
