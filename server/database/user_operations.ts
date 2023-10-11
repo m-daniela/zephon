@@ -1,8 +1,7 @@
 import { FirebaseError } from "@firebase/util";
-import { User } from "../types/user_types";
-import { errorMessageBuilder } from "../utils/functions";
+import { UserType } from "../types/user_types";
+import { errorMessageBuilder } from "../utils/errors";
 import { db } from "./config";
-import { generateAccessToken } from "../authentication/authenticate";
 import { firebasePaths } from "../utils/constants";
 
 
@@ -14,7 +13,7 @@ import { firebasePaths } from "../utils/constants";
  * @param userData: User
  * @returns user data and the authentication token
  */
-export const register = async (userData: User) => {
+export const register = async (userData: UserType) => {
     const userExists: boolean = await isUser(userData.email);
     if (userExists) {
         return errorMessageBuilder(
@@ -25,18 +24,13 @@ export const register = async (userData: User) => {
 
     try{
         await docRef.set(userData);
-        const authToken = generateAccessToken(userData.email);
-        return {
-            ...userData, 
-            authToken
-        };
     }
     catch(error: unknown){
         if (error instanceof FirebaseError){
             return errorMessageBuilder(
                 `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
         }
-        return error;
+        return errorMessageBuilder(`${error}`);
     }
 };
 

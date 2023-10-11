@@ -1,5 +1,5 @@
 
-export interface Conversation {
+export type ConversationType = {
     id?: string, 
     dateCreated?: Date, 
     isEncrypted: boolean, 

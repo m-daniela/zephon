@@ -1,4 +1,6 @@
-import { FirebaseError } from "@firebase/util";
+import { FirebaseError } from "firebase/app";
+import { errorsToMessage } from "./constants";
+
 
 export type ErrorMessageType = {
     message: string, 
@@ -7,14 +9,6 @@ export type ErrorMessageType = {
 
 export type ErrorMessageResponseType = {
     error: ErrorMessageType
-}
-
-export class DBError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = "DBError";
-        Error.captureStackTrace(this);
-    }
 }
 
 export const errorMessageBuilder = (
@@ -38,12 +32,13 @@ export const handleError = (error: unknown): ErrorMessageResponseType => {
     let errorMessage = "Something went wrong... Please try again later.";
     let errorReason;
     if (error) {
-        if (error instanceof Error || error instanceof DBError){
+        if (error instanceof Error){
             errorMessage = error.message;
             errorReason = error.stack;
         }
         else if (error instanceof FirebaseError){
-            errorMessage = `${error.code}: ${error.name} - ${error.message}`;
+            errorMessage = errorsToMessage[error.code]; 
+            // errorMessage = `${error.code}: ${error.name} - ${error.message}`;
             errorReason = error.customData;
         }
         else {

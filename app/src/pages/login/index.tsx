@@ -1,26 +1,18 @@
-import { apiUrls, errorsToMessage } from "@/utils/constants";
+import { useAuthContext } from "@/context/AuthenticationProvider";
+import { loginUserCall } from "@/utils/apiCalls/user_operations";
+import { routes } from "@/utils/constants";
+import { handleError } from "@/utils/errors";
 import { loginUser } from "@/utils/firebase/user_signup_login";
-import { FirebaseError } from "firebase/app";
+import { handleApiResponse } from "@/utils/functions";
+import { AuthTokenResponseType } from "@/utils/types/utils";
+
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-
-const loginUserCall = async (email: string) => {
-    const response = await fetch(
-        apiUrls.login, 
-        {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({email})
-        });
-    return await response.json();
-};
 
 /**
  * Login page
- * TODO: save the token
  */
 const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -28,6 +20,14 @@ const LoginPage: React.FC = () => {
         password: "", 
     });
     const [error, setError] = useState("");
+    const {login, token} = useAuthContext();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (token) {
+            router.push(routes.home);
+        }
+    }, [token, router]);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
@@ -41,22 +41,20 @@ const LoginPage: React.FC = () => {
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try{
-            const response = await loginUser(formData.email, formData.password);
-            console.log(response);
-            const token = await loginUserCall(formData.email);
-            console.log("token", token);
-            // save it in the local storage, for now
-            localStorage.setItem("token", token.authToken);
+            // login using Firebase Auth
+            await loginUser(formData.email, formData.password);
+            // obtain the token from the server
+            const message = await loginUserCall(formData.email);
+            const response = handleApiResponse<AuthTokenResponseType>(message, setError);
+            if (response) {
+                login((response as AuthTokenResponseType).authToken);
+                router.push(routes.home);
+            }
         }
         catch(error: unknown){
+            const errorMessage = handleError(error);
             console.log("error", error);
-            if (error instanceof FirebaseError) {
-                const errorMessage = errorsToMessage[error.code] ?? error.message;
-                setError(errorMessage);
-            }
-            else {
-                setError(JSON.stringify(error));
-            }
+            setError(errorMessage.error.message);
         }
     };
 

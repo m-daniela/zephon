@@ -1,10 +1,9 @@
+import { ErrorMessageResponseType } from "../errors";
 
+export type AuthTokenType = null | undefined | string;
 
-export interface ErrorMessage {
-    message: string, 
-    reason?: string
+export type AuthTokenResponseType = {
+    authToken: string;
 }
 
-export interface ErrorMessageResponse {
-    error: ErrorMessage
-}
+export type ApiResponseType<T> = ErrorMessageResponseType | T

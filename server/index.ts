@@ -1,9 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { getConversations, getMessages, getUsers } from "./database/get_data";
 import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
-import { User } from "./types/user_types";
+import { UserType } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
 import { addConversation, addMessage } from "./database/add_data";
 import { deleteConversationWrapper, deleteMessage } from "./database/delete_data";
@@ -16,6 +17,7 @@ const app: Express = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.get("/", async (req: Request, res: Response) => {
     await getUsers();
@@ -30,15 +32,17 @@ app.post("/auth", authenticateToken, async (req: Request, res: Response) => {
 });
 
 app.post(endpoints.register, async (req: Request, res: Response) => {
-    const userData: User = req.body as User;
-    console.log("server", userData);
+    const userData: UserType = req.body as UserType;
     const message = await register(userData);
-    res.send(message);
+    if (message) {
+        res.send(message);
+    }
+    const authToken = generateAccessToken(userData.email);
+    res.send({authToken});
 });
 
 app.post(endpoints.login, async (req: Request, res: Response) => {
     const email: string = req.body.email;
-    console.log("server", email);
     const authToken = generateAccessToken(email);
     res.json({authToken});
 });
