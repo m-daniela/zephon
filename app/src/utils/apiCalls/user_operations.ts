@@ -1,7 +1,10 @@
 import { apiUrls } from "../constants";
-import { User } from "../types/user_types";
+import { UserType } from "../types/user_types";
+import { ApiResponseType, AuthTokenResponseType } from "../types/utils";
 
-export const loginUserCall = async (email: string) => {
+
+export const loginUserCall = async (
+    email: string): Promise<ApiResponseType<AuthTokenResponseType>> => {
     const response = await fetch(
         apiUrls.login, 
         {
@@ -22,7 +25,8 @@ export const loginUserCall = async (email: string) => {
  * @param user 
  * @returns user data | error message
  */
-export const registerUserCall = async (user: User) => {
+export const registerUserCall = async (
+    user: UserType): Promise<ApiResponseType<AuthTokenResponseType>> => {
     const response = await fetch(
         apiUrls.register, 
         {

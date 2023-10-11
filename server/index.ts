@@ -4,7 +4,7 @@ import cors from "cors";
 import { getConversations, getMessages, getUsers } from "./database/get_data";
 import { endpoints } from "./utils/constants";
 import { register } from "./database/user_operations";
-import { User } from "./types/user_types";
+import { UserType } from "./types/user_types";
 import { authenticateToken, generateAccessToken } from "./authentication/authenticate";
 import { addConversation, addMessage } from "./database/add_data";
 import { deleteConversationWrapper, deleteMessage } from "./database/delete_data";
@@ -32,7 +32,7 @@ app.post("/auth", authenticateToken, async (req: Request, res: Response) => {
 });
 
 app.post(endpoints.register, async (req: Request, res: Response) => {
-    const userData: User = req.body as User;
+    const userData: UserType = req.body as UserType;
     const message = await register(userData);
     if (message) {
         res.send(message);

@@ -1,8 +1,11 @@
 import { useAuthContext } from "@/context/AuthenticationProvider";
 import { loginUserCall } from "@/utils/apiCalls/user_operations";
-import { errorsToMessage, routes } from "@/utils/constants";
+import { routes } from "@/utils/constants";
+import { handleError } from "@/utils/errors";
 import { loginUser } from "@/utils/firebase/user_signup_login";
-import { FirebaseError } from "firebase/app";
+import { handleApiResponse } from "@/utils/functions";
+import { AuthTokenResponseType } from "@/utils/types/utils";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -38,22 +41,20 @@ const LoginPage: React.FC = () => {
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try{
-            const response = await loginUser(formData.email, formData.password);
-            console.log(response);
-            const token = await loginUserCall(formData.email);
-            console.log("token", token);
-            login(token.authToken);
-            router.push(routes.home);
+            // login using Firebase Auth
+            await loginUser(formData.email, formData.password);
+            // obtain the token from the server
+            const message = await loginUserCall(formData.email);
+            const response = handleApiResponse<AuthTokenResponseType>(message, setError);
+            if (response) {
+                login((response as AuthTokenResponseType).authToken);
+                router.push(routes.home);
+            }
         }
         catch(error: unknown){
+            const errorMessage = handleError(error);
             console.log("error", error);
-            if (error instanceof FirebaseError) {
-                const errorMessage = errorsToMessage[error.code] ?? error.message;
-                setError(errorMessage);
-            }
-            else {
-                setError(JSON.stringify(error));
-            }
+            setError(errorMessage.error.message);
         }
     };
 

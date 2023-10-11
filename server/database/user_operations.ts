@@ -1,6 +1,6 @@
 import { FirebaseError } from "@firebase/util";
-import { User } from "../types/user_types";
-import { errorMessageBuilder } from "../utils/functions";
+import { UserType } from "../types/user_types";
+import { errorMessageBuilder } from "../utils/errors";
 import { db } from "./config";
 import { firebasePaths } from "../utils/constants";
 
@@ -13,7 +13,7 @@ import { firebasePaths } from "../utils/constants";
  * @param userData: User
  * @returns user data and the authentication token
  */
-export const register = async (userData: User) => {
+export const register = async (userData: UserType) => {
     const userExists: boolean = await isUser(userData.email);
     if (userExists) {
         return errorMessageBuilder(

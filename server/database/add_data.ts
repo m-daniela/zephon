@@ -1,12 +1,11 @@
 import { FieldValue } from "firebase-admin/firestore";
-import { FirebaseError } from "@firebase/util";
-import { Conversation } from "../types/conversation_types";
+import { ConversationType } from "../types/conversation_types";
 import { firebasePaths } from "../utils/constants";
-import { DBError } from "../utils/errors";
-import { errorMessageBuilder } from "../utils/functions";
+import { handleError } from "../utils/errors";
+import { errorMessageBuilder } from "../utils/errors";
 import { db } from "./config";
 import { addConversationToUsers } from "./update_data";
-import { Message } from "../types/message_types";
+import { MessageType } from "../types/message_types";
 import { conversationExists } from "./get_data";
 
 
@@ -14,9 +13,9 @@ import { conversationExists } from "./get_data";
  * Add the conversation to the database
  * Save the conversation id for each participant
  * @param conversationData conversation object
- * @returns conversationData, with id
+ * @returns conversationData, with id | error
  */
-export const addConversation = async (conversationData: Conversation) => {
+export const addConversation = async (conversationData: ConversationType) => {
     const conversationRef = db.collection(firebasePaths.conversations).doc();
 
     try {
@@ -33,14 +32,7 @@ export const addConversation = async (conversationData: Conversation) => {
         };
     }
     catch (error: unknown){
-        if (error instanceof DBError){
-            return errorMessageBuilder(error.message, error.stack);
-        }
-        if (error instanceof FirebaseError){
-            return errorMessageBuilder(
-                `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
-        }
-        return errorMessageBuilder((error as Error).message, (error as Error).stack);
+        return handleError(error);
     }
 };
 
@@ -51,9 +43,9 @@ export const addConversation = async (conversationData: Conversation) => {
  * inside the conversation document
  * @param conversationId 
  * @param messageData 
- * @returns messageData, with an id
+ * @returns messageData, with an id | error
  */
-export const addMessage = async (conversationId: string, messageData: Message) => {
+export const addMessage = async (conversationId: string, messageData: MessageType) => {
 
     const isConversation = await conversationExists(conversationId);
     if (!isConversation){
@@ -74,14 +66,7 @@ export const addMessage = async (conversationId: string, messageData: Message) =
         };
     }
     catch (error: unknown){
-        if (error instanceof DBError){
-            return errorMessageBuilder(error.message, error.stack);
-        }
-        if (error instanceof FirebaseError){
-            return errorMessageBuilder(
-                `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
-        }
-        return errorMessageBuilder((error as Error).message, (error as Error).stack);
+        return handleError(error);
     }
 
 };
