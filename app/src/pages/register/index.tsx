@@ -1,9 +1,11 @@
 import { useAuthContext } from "@/context/AuthenticationProvider";
 import { registerUserCall } from "@/utils/apiCalls/user_operations";
 import { errorsToMessage, routes } from "@/utils/constants";
+import { handleError } from "@/utils/errors";
 import { registerUser } from "@/utils/firebase/user_signup_login";
+import { handleApiResponse } from "@/utils/functions";
 import { UserType } from "@/utils/types/user_types";
-import { FirebaseError } from "firebase/app";
+import { AuthTokenResponseType } from "@/utils/types/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -47,28 +49,23 @@ const RegisterPage: React.FC = () => {
             return;
         }
         try{
-            const response = await registerUser(formData.email, formData.password);
-            const dbResponse = await registerUserCall({
-                email: response.email, 
+            // register a new user using Firebase Auth
+            await registerUser(formData.email, formData.password);
+            // obtain the token from the server
+            const message = await registerUserCall({
+                email: formData.email, 
                 displayName: formData.displayName
             } as UserType);
-            if (dbResponse.error){
-                setError(dbResponse.error.message);
-            }
-            else{
-                console.log(dbResponse);
-                login(dbResponse.authToken);
+            const response = handleApiResponse<AuthTokenResponseType>(message, setError);
+            if (response) {
+                login((response as AuthTokenResponseType).authToken);
                 router.push(routes.home);
             }
         }
         catch(error: unknown){
-            if (error instanceof FirebaseError) {
-                const errorMessage = errorsToMessage[error.code] ?? error.message;
-                setError(errorMessage);
-            }
-            else {
-                setError(JSON.stringify(error));
-            }
+            const errorMessage = handleError(error);
+            console.log("error", error);
+            setError(errorMessage.error.message);
         }
     };
 
