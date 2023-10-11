@@ -1,12 +1,12 @@
 
 
-export interface ErrorMessage {
+export type ErrorMessageType = {
     message: string, 
     reason?: string
 }
 
-export interface ErrorMessageResponse {
-    error: ErrorMessage
+export type ErrorMessageResponseType = {
+    error: ErrorMessageType
 }
 
 export type AuthTokenType = null | undefined | string;

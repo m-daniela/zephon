@@ -1,5 +1,5 @@
 import { apiUrls } from "../constants";
-import { User } from "../types/user_types";
+import { UserType } from "../types/user_types";
 
 export const loginUserCall = async (email: string) => {
     const response = await fetch(
@@ -22,7 +22,7 @@ export const loginUserCall = async (email: string) => {
  * @param user 
  * @returns user data | error message
  */
-export const registerUserCall = async (user: User) => {
+export const registerUserCall = async (user: UserType) => {
     const response = await fetch(
         apiUrls.register, 
         {

@@ -1,5 +1,5 @@
 
-export interface Message {
+export type MessageType = {
     id: string, 
     dateSent: Date, 
     sender: string, 

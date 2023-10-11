@@ -1,10 +1,10 @@
 import { FieldPath } from "firebase-admin/firestore";
-import { User } from "../types/user_types";
+import { UserType } from "../types/user_types";
 import { firebasePaths } from "../utils/constants";
-import { errorMessageBuilder } from "../utils/functions";
+import { errorMessageBuilder, handleError } from "../utils/errors";
 import { db } from "./config";
-import { Conversation } from "../types/conversation_types";
-import { Message } from "../types/message_types";
+import { ConversationType } from "../types/conversation_types";
+import { MessageType } from "../types/message_types";
 
 export const getUsers = async () => {
     const snapshot = await db.collection("users").get();
@@ -18,32 +18,29 @@ export const getUsers = async () => {
  * Fetch the conversation data, without the messages
  * @param email 
  * @returns object with conversations
- * {
- *      conversations: {
- *          conversationId: {
- *              conversationData
- *          }
- *      }
- * }
  */
 export const getConversations = async (email: string) => {
     const usersRef = db.collection(firebasePaths.users);
     const user = await usersRef.doc(email).get();
-    const conversations: {[key: string]: Conversation} = {};
+    const conversations: {[key: string]: ConversationType} = {};
     if (!user.exists){
         return errorMessageBuilder(`Could not find the user with email ${email}`);
     }
     else {
-        const conversationIds = (user.data() as User).conversations;
-        const conversationsSnapshot = await db.collection(firebasePaths.conversations)
-            .where(FieldPath.documentId(), "in", conversationIds).get();
-        conversationsSnapshot.forEach(conversation => {
-            conversations[conversation.id] = {
-                id: conversation.id,
-                ...conversation.data()
-            } as Conversation;
-        });
-        return {conversations};
+        try {
+            const conversationIds = (user.data() as UserType).conversations;
+            const conversationsSnapshot = await db.collection(firebasePaths.conversations)
+                .where(FieldPath.documentId(), "in", conversationIds).get();
+            conversationsSnapshot.forEach(conversation => {
+                conversations[conversation.id] = {
+                    id: conversation.id,
+                    ...conversation.data()
+                } as ConversationType;
+            });
+            return {conversations};
+        } catch (error: unknown) {
+            return handleError(error);
+        }
     }
 };
 
@@ -61,37 +58,35 @@ export const conversationExists = async (conversationId: string) => {
 
 
 /**
- * 
+ * Get the messages for a given conversation. 
+ * The messages are sent as an object containing 
+ * messageId - messageData pairs.
  * @param conversationId 
  * @returns conversationId and the associated messages
-{
-    conversationId, 
-    messages {
-        messageId: {
-            id: messageId,
-            ...messageData
-        }
-    }
-}
  */
 export const getMessages = async (conversationId: string) => {
     const isConversation = await conversationExists(conversationId);
     if (!isConversation){
         return errorMessageBuilder(`Could not find conversation ${conversationId}`);
     }
-    const messages: {[key: string]: Message} = {};
-    const messagesSnapshot = await db.collection(firebasePaths.messages(conversationId)).get();
-    messagesSnapshot.forEach(message => {
-        messages[message.id] = {
-            id: message.id, 
-            ...message.data()
-        } as Message;
-    });
+    const messages: {[key: string]: MessageType} = {};
 
-    return {
-        conversationId, 
-        messages
-    };
+    try {
+        const messagesSnapshot = await db.collection(firebasePaths.messages(conversationId)).get();
+        messagesSnapshot.forEach(message => {
+            messages[message.id] = {
+                id: message.id, 
+                ...message.data()
+            } as MessageType;
+        });
+    
+        return {
+            conversationId, 
+            messages
+        };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
 };
 
 

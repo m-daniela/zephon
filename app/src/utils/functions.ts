@@ -1,4 +1,4 @@
-import { ErrorMessage, ErrorMessageResponse } from "./types/utils";
+import { ErrorMessageType, ErrorMessageResponseType } from "./types/utils";
 
 
 export const errorChecker = (error: unknown) => {
@@ -8,8 +8,8 @@ export const errorChecker = (error: unknown) => {
     
 };
 
-export const errorMessageBuilder = (message: string, reason?: string): ErrorMessageResponse => {
-    const error: ErrorMessage = {
+export const errorMessageBuilder = (message: string, reason?: string): ErrorMessageResponseType => {
+    const error: ErrorMessageType = {
         message
     };
     if (reason) {

@@ -2,7 +2,7 @@ import { useAuthContext } from "@/context/AuthenticationProvider";
 import { registerUserCall } from "@/utils/apiCalls/user_operations";
 import { errorsToMessage, routes } from "@/utils/constants";
 import { registerUser } from "@/utils/firebase/user_signup_login";
-import { AuthUser } from "@/utils/types/user_types";
+import { UserType } from "@/utils/types/user_types";
 import { FirebaseError } from "firebase/app";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -51,7 +51,7 @@ const RegisterPage: React.FC = () => {
             const dbResponse = await registerUserCall({
                 email: response.email, 
                 displayName: formData.displayName
-            } as AuthUser);
+            } as UserType);
             if (dbResponse.error){
                 setError(dbResponse.error.message);
             }

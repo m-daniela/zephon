@@ -1,13 +1,9 @@
 import { User as FbUser } from "firebase/auth";
 
-export interface User {
+export type UserType = {
     email: string, 
     displayName: string,
     conversations?: string[]
 }
 
-export interface AuthUser extends User {
-    authToken: string
-}
-
-export type FirebaseUser = FbUser;
+export type FirebaseUserType = FbUser;

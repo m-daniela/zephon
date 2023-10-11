@@ -1,10 +1,9 @@
-import { FirebaseError } from "@firebase/util";
 import { batchSize, firebasePaths } from "../utils/constants";
-import { errorMessageBuilder } from "../utils/functions";
+import { errorMessageBuilder, handleError } from "../utils/errors";
 import { db } from "./config";
 import { conversationExists, messageExists } from "./get_data";
 import { removeConversationFromUsers } from "./update_data";
-import { Conversation } from "../types/conversation_types";
+import { ConversationType } from "../types/conversation_types";
 import { DocumentData, Firestore, Query } from "firebase-admin/firestore";
 import { DeleteResolve } from "../types/utils";
 
@@ -63,21 +62,26 @@ export const deleteConversationWrapper = async (conversationId: string) => {
     }
     const conversationRef = db.collection(firebasePaths.conversations).doc(conversationId);
     const conversationSnapshot = await conversationRef.get();
-    const conversation = conversationSnapshot.data() as Conversation;
+    const conversation = conversationSnapshot.data() as ConversationType;
 
-    // remove the conversation from the participants' conversations
-    // to make sure it will not be displayed later
-    await removeConversationFromUsers(conversation.participants, conversationId);
+    try {
+        // remove the conversation from the participants' conversations
+        // to make sure it will not be displayed later
+        await removeConversationFromUsers(conversation.participants, conversationId);
 
-    const messagesRef = db.collection(firebasePaths.messages(conversationId));
-    // split the messages in batches and recursively remove them
-    const messagesQuery = messagesRef.limit(batchSize);
-    (new Promise((resolve, reject) => {
-        deleteQueryBatch(db, messagesQuery, resolve, conversationId).catch(reject);
-    }));
-    return {
-        id: conversationId
-    };
+        const messagesRef = db.collection(firebasePaths.messages(conversationId));
+        // split the messages in batches and recursively remove them
+        const messagesQuery = messagesRef.limit(batchSize);
+        (new Promise((resolve, reject) => {
+            deleteQueryBatch(db, messagesQuery, resolve, conversationId).catch(reject);
+        }));
+        return {
+            id: conversationId
+        };
+    } catch (error: unknown){
+        return handleError(error);
+    }
+    
 };
 
 
@@ -99,10 +103,6 @@ export const deleteMessage = async (conversationId: string, messageId: string) =
         };
     }
     catch (error: unknown){
-        if (error instanceof FirebaseError){
-            return errorMessageBuilder(
-                `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
-        }
-        return errorMessageBuilder((error as Error).message, (error as Error).stack);
+        return handleError(error);
     }
 };

@@ -3,13 +3,12 @@ import {
     CollectionReference, 
     DocumentData, 
     DocumentReference } from "firebase-admin/firestore";
-import { FirebaseError } from "@firebase/util";
 import { firebasePaths } from "../utils/constants";
-import { DBError } from "../utils/errors";
+import { DBError, handleError } from "../utils/errors";
 import { db } from "./config";
-import { Conversation } from "../types/conversation_types";
+import { ConversationType } from "../types/conversation_types";
 import { conversationExists } from "./get_data";
-import { errorMessageBuilder } from "../utils/functions";
+import { errorMessageBuilder } from "../utils/errors";
 
 
 /**
@@ -70,7 +69,7 @@ export const removeConversationFromUsers = async (
  * @returns 
  */
 export const updateConversation = async (
-    conversationId: string, conversationData: Conversation) => {
+    conversationId: string, conversationData: ConversationType) => {
     const isConversation = await conversationExists(conversationId);
     if (!isConversation){
         return errorMessageBuilder(`Could not find conversation ${conversationId}`);
@@ -90,11 +89,7 @@ export const updateConversation = async (
         return conversationData;
     }
     catch (error: unknown){
-        if (error instanceof FirebaseError){
-            return errorMessageBuilder(
-                `${error.code}: ${error.name} - ${error.message}`, `${error.customData}`);
-        }
-        return errorMessageBuilder((error as Error).message, (error as Error).stack);
+        return handleError(error);
     }
 };
 
@@ -110,7 +105,7 @@ export const updateConversation = async (
 const checkConversationParicipants = async (
     conversationId: string, participants: string[], 
     conversationRef: DocumentReference<DocumentData>) => {
-    const conversation = (await conversationRef.get()).data() as Conversation;
+    const conversation = (await conversationRef.get()).data() as ConversationType;
     const existingParticipants = conversation.participants;
     const newParticipants = participants.filter(
         participant => !existingParticipants.includes(participant));
