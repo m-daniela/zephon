@@ -7,3 +7,7 @@ export type ConversationType = {
     participants: string[], 
     messages: string[]
 }
+
+export type ConversationResponseType = {
+    conversations: {[key: string]: ConversationType}
+}

@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
             const message = await loginUserCall(formData.email);
             const response = handleApiResponse<AuthTokenResponseType>(message, setError);
             if (response) {
-                login((response as AuthTokenResponseType).authToken);
+                login((response as AuthTokenResponseType).authToken, formData.email);
                 router.push(routes.home);
             }
         }

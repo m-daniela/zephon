@@ -8,7 +8,8 @@ type Props = {
 
 type AuthContextType = {
     token: AuthTokenType, 
-    login: (newToken: string) => void
+    email: string,
+    login: (newToken: string, userEmail: string) => void
     logout: () => void
 }
 
@@ -23,23 +24,28 @@ const AuthenticationContext = createContext<AuthContextType>({} as AuthContextTy
  */
 const AuthenticationProvider = ({children}: Props) => {
     const [token, setToken] = useState<AuthTokenType>(Cookies.get("token"));
+    const [email, setEmail] = useState<string>(Cookies.get("email") ?? "");
 
-    const login = (newToken: string) => {
+    const login = (newToken: string, userEmail: string) => {
         setToken(newToken);
-        console.log("token token token", newToken);
+        setEmail(userEmail);
         // save in local storage for now
         localStorage.setItem("token", newToken);
         Cookies.set("token", newToken, {expires: 1});
+        Cookies.set("email", userEmail, {expires: 1});
     };
 
     const logout = () => {
         setToken(null);
+        setEmail("");
         localStorage.removeItem("token");
+        localStorage.removeItem("email");
         Cookies.remove("token");
+        Cookies.set("email", "");
     };
 
     return (
-        <AuthenticationContext.Provider value={{token, login, logout}}>
+        <AuthenticationContext.Provider value={{token, email, login, logout}}>
             {children}
         </AuthenticationContext.Provider>
     );

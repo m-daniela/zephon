@@ -14,8 +14,19 @@ export function handleApiResponse<T>(
     response: ApiResponseType<NonNullable<T>>, 
     handleMessage?: React.Dispatch<React.SetStateAction<string>>) {
     if (typeof response === "object" && "error" in response && handleMessage) {
-        handleMessage(response.error.message);
+        handleMessage(() => response.error.message);
         return;
     }
     return response;
 }
+
+
+/**
+ * Get the participants string
+ * TODO: will probably replace the current user with "you"
+ * @param {string[]} participantsList 
+ * @returns {string} comma separated list of participants
+ */
+export const getParticipantsString = (participantsList: string[]): string => {
+    return participantsList.join(", ");
+};

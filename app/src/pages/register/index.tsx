@@ -62,7 +62,7 @@ const RegisterPage: React.FC = () => {
             } as UserType);
             const response = handleApiResponse<AuthTokenResponseType>(message, setError);
             if (response) {
-                login((response as AuthTokenResponseType).authToken);
+                login((response as AuthTokenResponseType).authToken, formData.email);
                 router.push(routes.home);
             }
         }
