@@ -4,6 +4,7 @@ import { errorsToMessage, routes } from "@/utils/constants";
 import { handleError } from "@/utils/errors";
 import { registerUser } from "@/utils/firebase/user_signup_login";
 import { handleApiResponse } from "@/utils/functions";
+import { PasswordValidator } from "@/utils/password_validator";
 import { UserType } from "@/utils/types/user_types";
 import { AuthTokenResponseType } from "@/utils/types/utils";
 import Link from "next/link";
@@ -13,7 +14,6 @@ import React, { useEffect, useState } from "react";
 
 /**
  * Registration page
- * TODO: check password strength
  * @returns 
  */
 const RegisterPage: React.FC = () => {
@@ -26,6 +26,7 @@ const RegisterPage: React.FC = () => {
     const [error, setError] = useState("");
     const {login, token} = useAuthContext();
     const router = useRouter();
+    const passwordValidator = new PasswordValidator();
 
     useEffect(() => {
         if (token) {
@@ -40,6 +41,9 @@ const RegisterPage: React.FC = () => {
             ...formData, 
             [name]: value
         });
+        if (name === "password") {
+            setError(passwordValidator.validate(value).getValidationMessage());
+        }
     };
 
     const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
