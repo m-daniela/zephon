@@ -16,9 +16,8 @@ import { conversationExists } from "./get_data";
  * @returns conversationData, with id | error
  */
 export const addConversation = async (conversationData: ConversationType) => {
-    const conversationRef = db.collection(firebasePaths.conversations).doc();
-
     try {
+        const conversationRef = db.collection(firebasePaths.conversations).doc();
         await addConversationToUsers(conversationData.participants, conversationRef.id as string);
         const conversationWithTimestamp = {
             dateCreated: FieldValue.serverTimestamp(), 

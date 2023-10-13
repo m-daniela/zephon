@@ -19,5 +19,6 @@ const url = "http://localhost:5000";
 export const apiUrls = {
     register: `${url}/register`,
     login: `${url}/login`,
-    getConversations: `${url}/conversations`
+    getConversations: `${url}/conversations`, 
+    addConversation: `${url}/conversation`,
 };

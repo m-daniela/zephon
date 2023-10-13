@@ -64,6 +64,7 @@ body {
 }
 
 main {
+  max-width: var(--max-width);
   height: 100vh;
   section {
     height: 100%;
