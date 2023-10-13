@@ -49,3 +49,25 @@ export const addConversationCall = async (
         });
     return await response.json();
 };
+
+
+/**
+ * Sends the conversation data to the server.
+ * @param {string} conversationId 
+ * @param {string} token 
+ * @returns conversation data | error message
+ */
+export const deleteConversationCall = async (
+    conversationId: string, token: AuthTokenType
+): Promise<ApiResponseType<ConversationResponseType>> => {
+    const response = await fetch(
+        apiUrls.updateDeleteConversation(conversationId), 
+        {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+    return await response.json();
+};

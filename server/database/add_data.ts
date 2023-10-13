@@ -12,6 +12,7 @@ import { conversationExists } from "./get_data";
 /**
  * Add the conversation to the database
  * Save the conversation id for each participant
+ * TODO: make the conversations unique 
  * @param conversationData conversation object
  * @returns conversationData, with id | error
  */

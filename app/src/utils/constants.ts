@@ -21,4 +21,5 @@ export const apiUrls = {
     login: `${url}/login`,
     getConversations: `${url}/conversations`, 
     addConversation: `${url}/conversation`,
+    updateDeleteConversation: (conversationId: string) => `${url}/conversation/${conversationId}`
 };
