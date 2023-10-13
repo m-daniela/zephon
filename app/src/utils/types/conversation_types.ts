@@ -1,9 +1,16 @@
 
-export type ConversationType = {
+export type CreateConversationType = {
+    name?: string, 
+    isEncrypted: boolean, 
+    participants: string[]
+}
+
+export type ConversationType = CreateConversationType & {
     id: string, 
     dateCreated: Date, 
-    isEncrypted: boolean, 
-    name?: string, 
-    participants: string[], 
     messages: string[]
+}
+
+export type ConversationResponseType = {
+    conversations: {[key: string]: ConversationType}
 }

@@ -28,7 +28,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     render() {
         if (this.state.hasError) {
             // You can render any custom fallback UI
-            return this.props.fallback;
+            return <span>Error...</span>;
         }
     
         return this.props.children;

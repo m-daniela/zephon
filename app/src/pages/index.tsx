@@ -1,3 +1,4 @@
+import LeftSideLayout from "@/components/leftSide/LeftSideLayout";
 import { useAuthContext } from "@/context/AuthenticationProvider";
 import { routes } from "@/utils/constants";
 import { useRouter } from "next/router";
@@ -19,6 +20,7 @@ export default function Home() {
     
     return (
         <section>
+            <LeftSideLayout />
             <button onClick={logout}>Log out</button>
         </section>
     );
