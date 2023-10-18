@@ -1,10 +1,7 @@
-import { AuthTokenType } from "../utils/types/utils";
-import React, { createContext, useState } from "react";
+import { AuthTokenType, ChildrenPropsType } from "../utils/types/utils";
+import { createContext, useState } from "react";
 import Cookies from "js-cookie";
 
-type Props = {
-    children: React.ReactNode
-}
 
 export type AuthContextType = {
     token: AuthTokenType, 
@@ -19,11 +16,10 @@ export const AuthenticationContext = createContext<AuthContextType>({} as AuthCo
  * Authentication context and provider
  * This handles the authentication token for the currently 
  * logged user
- * @param {Props} children
+ * @param {ChildrenPropsType} children
  * @returns 
  */
-const AuthenticationProvider = ({children}: Props) => {
-    // TODO: cleanup the states
+const AuthenticationProvider: React.FC<ChildrenPropsType> = ({children}: ChildrenPropsType) => {
     const [token, setToken] = useState<AuthTokenType>(Cookies.get("token"));
     const [email, setEmail] = useState<string>(Cookies.get("email") ?? "");
 

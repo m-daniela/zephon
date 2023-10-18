@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import ErrorPage from "../components/errors/ErrorPage";
+import ErrorPage from "../pages/errors/ErrorPage";
 import LoginPage from "../pages/LoginPage";
 import { routes } from "./constants";
 import RegisterPage from "../pages/RegisterPage";

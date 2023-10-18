@@ -24,13 +24,7 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState("");
     const {login} = useAuthContext();
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (token) {
-    //         navigate(routes.home);
-    //     }
-    // }, [token, navigate]);
-
+    
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
         const value: string = e.target.value;
