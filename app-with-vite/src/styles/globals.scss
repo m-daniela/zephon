@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Nunito:wght@200&display=swap');
+
+@import "./utils.scss";
+@import "./forms.scss";
+
+
+:root{
+  --max-width: 1100px;
+  --border-radius: 5px;
+
+  --primary-background: #181818;
+  --primary-font: #faf1e7cc;
+  --secondary-background: #080808a1;
+  --accent-background: #131313;
+  --message-background: #222222;
+  --message-background-current: #111;
+  --input-background: #3030307c;
+  --input-highlight: #343434;
+  --highlights: rgba(255, 255, 255, .4);
+  --shadows: rgba(0, 0, 0, .4);
+  --error: #f33333;
+  --switch-track-active: rgba(255, 255, 255, .7);
+  --switch-track-inactive: rgba(255, 255, 255, .2);
+  
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-family: 'Montserrat', sans-serif;
+  // --font-family: 'Nunito', sans-serif;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --primary-background: #f5f5f5;
+    --primary-font: #020100;
+    --secondary-background: #edede6;
+    --accent-background: #e2e1dd;
+    --message-background: #dfdccf;
+    --message-background-current: #dee0df;
+    --input-background: #30303030;
+    --highlights: #30303030;
+    --switch-track-active: #303030ab;
+    --switch-track-inactive: #30303031;
+  }
+}
+
+body, button, input{
+  // font-family: 'Raleway', sans-serif;
+  // font-family: 'Assistant', sans-serif;
+  font-family: var(--font-family);
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+main {
+  max-width: var(--max-width);
+  height: 100vh;
+  section {
+    height: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
