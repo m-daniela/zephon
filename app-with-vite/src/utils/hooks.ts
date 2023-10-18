@@ -1,9 +1,19 @@
-import { useAuthContext } from "@/context/AuthenticationProvider";
+import { AuthenticationContext, AuthContextType } from "../context/AuthenticationProvider";
 import useSWR from "swr";
 import { getConversationsFetcher } from "./apiCalls/conversation_operations";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { handleApiResponse } from "./functions";
 import { handleError } from "./errors";
+
+/**
+ * The authentication hook checks if there is a token for
+ * the current user and, if not, the user is redirected
+ * to the login page. Otherwise, the context data is returned
+ * @returns context | redirect to login page
+ */
+export const useAuthContext = (): AuthContextType => {
+    return useContext(AuthenticationContext);
+};
 
 
 /**
