@@ -12,13 +12,13 @@ import { conversationExists } from "./get_data";
 /**
  * Add the conversation to the database
  * Save the conversation id for each participant
+ * TODO: make the conversations unique 
  * @param conversationData conversation object
  * @returns conversationData, with id | error
  */
 export const addConversation = async (conversationData: ConversationType) => {
-    const conversationRef = db.collection(firebasePaths.conversations).doc();
-
     try {
+        const conversationRef = db.collection(firebasePaths.conversations).doc();
         await addConversationToUsers(conversationData.participants, conversationRef.id as string);
         const conversationWithTimestamp = {
             dateCreated: FieldValue.serverTimestamp(), 

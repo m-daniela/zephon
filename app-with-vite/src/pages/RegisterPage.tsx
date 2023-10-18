@@ -1,19 +1,23 @@
-import { useAuthContext } from "@/context/AuthenticationProvider";
-import { registerUserCall } from "@/utils/apiCalls/user_operations";
-import { errorsToMessage, routes } from "@/utils/constants";
-import { handleError } from "@/utils/errors";
-import { registerUser } from "@/utils/firebase/user_signup_login";
-import { handleApiResponse } from "@/utils/functions";
-import { PasswordValidator } from "@/utils/password_validator";
-import { UserType } from "@/utils/types/user_types";
-import { AuthTokenResponseType } from "@/utils/types/utils";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { registerUserCall } from "../utils/apiCalls/user_operations";
+import { errorsToMessage, routes } from "../utils/constants";
+import { handleError } from "../utils/errors";
+import { registerUser } from "../utils/firebase/user_signup_login";
+import { handleApiResponse } from "../utils/functions";
+import { useAuthContext } from "../utils/hooks";
+import { PasswordValidator } from "../utils/password_validator";
+import { UserType } from "../utils/types/user_types";
+import { AuthTokenResponseType } from "../utils/types/utils";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 /**
  * Registration page
+ * If the user was successfully created and logged in, 
+ * the app redirects to the main page. Otherwise, an 
+ * error message is displayed, with the problem that  
+ * has occurred. 
  * @returns 
  */
 const RegisterPage: React.FC = () => {
@@ -24,15 +28,9 @@ const RegisterPage: React.FC = () => {
         retypePassword: "", 
     });
     const [error, setError] = useState("");
-    const {login, token} = useAuthContext();
-    const router = useRouter();
+    const {login} = useAuthContext();
+    const navigate = useNavigate();
     const passwordValidator = new PasswordValidator();
-
-    useEffect(() => {
-        if (token) {
-            router.push(routes.home);
-        }
-    }, [token, router]);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
@@ -63,7 +61,7 @@ const RegisterPage: React.FC = () => {
             const response = handleApiResponse<AuthTokenResponseType>(message, setError);
             if (response) {
                 login((response as AuthTokenResponseType).authToken, formData.email);
-                router.push(routes.home);
+                navigate(routes.home);
             }
         }
         catch(error: unknown){
@@ -108,7 +106,7 @@ const RegisterPage: React.FC = () => {
                 <span className="error-message">{error}</span>
                 <button className="primary-button" type="submit">Register</button>
                 <span className="action-span">
-                    Already registered? <Link href={routes.login}>Login here</Link></span>
+                    Already registered? <Link to={routes.login}>Login here</Link></span>
             </form>
         </section>
     );

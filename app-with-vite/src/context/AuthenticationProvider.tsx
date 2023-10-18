@@ -1,28 +1,25 @@
-import { AuthTokenType } from "@/utils/types/utils";
-import React, { createContext, useContext, useState } from "react";
+import { AuthTokenType, ChildrenPropsType } from "../utils/types/utils";
+import { createContext, useState } from "react";
 import Cookies from "js-cookie";
 
-type Props = {
-    children: React.ReactNode
-}
 
-type AuthContextType = {
+export type AuthContextType = {
     token: AuthTokenType, 
     email: string,
     login: (newToken: string, userEmail: string) => void
-    logout: () => void
+    logout: () => void, 
 }
 
-const AuthenticationContext = createContext<AuthContextType>({} as AuthContextType);
+export const AuthenticationContext = createContext<AuthContextType>({} as AuthContextType);
 
 /**
  * Authentication context and provider
  * This handles the authentication token for the currently 
  * logged user
- * @param {Props} children
+ * @param {ChildrenPropsType} children
  * @returns 
  */
-const AuthenticationProvider = ({children}: Props) => {
+const AuthenticationProvider: React.FC<ChildrenPropsType> = ({children}: ChildrenPropsType) => {
     const [token, setToken] = useState<AuthTokenType>(Cookies.get("token"));
     const [email, setEmail] = useState<string>(Cookies.get("email") ?? "");
 
@@ -52,14 +49,3 @@ const AuthenticationProvider = ({children}: Props) => {
 };
 
 export default AuthenticationProvider;
-
-
-/**
- * The authentication hook checks if there is a token for
- * the current user and, if not, the user is redirected
- * to the login page. Otherwise, the context data is returned
- * @returns context | redirect to login page
- */
-export const useAuthContext = (): AuthContextType => {
-    return useContext(AuthenticationContext);
-};

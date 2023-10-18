@@ -1,18 +1,20 @@
-import { useAuthContext } from "@/context/AuthenticationProvider";
-import { loginUserCall } from "@/utils/apiCalls/user_operations";
-import { routes } from "@/utils/constants";
-import { handleError } from "@/utils/errors";
-import { loginUser } from "@/utils/firebase/user_signup_login";
-import { handleApiResponse } from "@/utils/functions";
-import { AuthTokenResponseType } from "@/utils/types/utils";
-
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUserCall } from "../utils/apiCalls/user_operations";
+import { routes } from "../utils/constants";
+import { handleError } from "../utils/errors";
+import { loginUser } from "../utils/firebase/user_signup_login";
+import { handleApiResponse } from "../utils/functions";
+import { useAuthContext } from "../utils/hooks";
+import { AuthTokenResponseType } from "../utils/types/utils";
+import React, { useState } from "react";
 
 
 /**
  * Login page
+ * If the user was successfully logged in, the app
+ * redirects to the main page. Otherwise, an error
+ * message is displayed, with the problem that has 
+ * occurred. 
  */
 const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -20,15 +22,9 @@ const LoginPage: React.FC = () => {
         password: "", 
     });
     const [error, setError] = useState("");
-    const {login, token} = useAuthContext();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (token) {
-            router.push(routes.home);
-        }
-    }, [token, router]);
-
+    const {login} = useAuthContext();
+    const navigate = useNavigate();
+    
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;
         const value: string = e.target.value;
@@ -48,7 +44,7 @@ const LoginPage: React.FC = () => {
             const response = handleApiResponse<AuthTokenResponseType>(message, setError);
             if (response) {
                 login((response as AuthTokenResponseType).authToken, formData.email);
-                router.push(routes.home);
+                navigate(routes.home);
             }
         }
         catch(error: unknown){
@@ -79,7 +75,7 @@ const LoginPage: React.FC = () => {
                 <span className="error-message">{error}</span>
                 <button className="primary-button" type="submit">Login</button>
                 <span className="action-span">
-                    New here? <Link href="/register">Create an account.</Link></span>
+                    New here? <Link to="/register">Create an account.</Link></span>
             </form>
         </section>
     );
