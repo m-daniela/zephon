@@ -1,5 +1,6 @@
 import { FirebaseError } from "firebase/app";
 import { errorsToMessage } from "./constants";
+import { isRouteErrorResponse } from "react-router-dom";
 
 
 export type ErrorMessageType = {
@@ -46,5 +47,20 @@ export const handleError = (error: unknown): ErrorMessageResponseType => {
         }
     }
     return errorMessageBuilder(errorMessage, errorReason);
-    
+};
+
+
+/**
+ * Handle a routing error. If it is a different type of
+ * error, handle it using the custom handleError function 
+ * @param {unknown} error 
+ * @returns error message object
+ */
+export const handleRouteError = (error: unknown): ErrorMessageResponseType => {
+    if (isRouteErrorResponse(error)) {
+        const errorMessage = `Error ${error.status}: ${error.statusText}`;
+        const errorReason = error.data;
+        return errorMessageBuilder(errorMessage, errorReason);
+    }
+    return handleError(error);
 };

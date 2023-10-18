@@ -14,7 +14,11 @@ import { Link } from "react-router-dom";
 
 /**
  * Registration page
- * ..returns 
+ * If the user was successfully created and logged in, 
+ * the app redirects to the main page. Otherwise, an 
+ * error message is displayed, with the problem that  
+ * has occurred. 
+ * @returns 
  */
 const RegisterPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -27,12 +31,6 @@ const RegisterPage: React.FC = () => {
     const {login} = useAuthContext();
     const navigate = useNavigate();
     const passwordValidator = new PasswordValidator();
-
-    // useEffect(() => {
-    //     if (token) {
-    //         navigate(routes.home);
-    //     }
-    // }, [token, navigate]);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = e.target.name;

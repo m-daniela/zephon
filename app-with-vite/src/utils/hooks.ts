@@ -9,7 +9,7 @@ import { handleError } from "./errors";
  * The authentication hook checks if there is a token for
  * the current user and, if not, the user is redirected
  * to the login page. Otherwise, the context data is returned
- * @returns context | redirect to login page
+ * @returns context
  */
 export const useAuthContext = (): AuthContextType => {
     return useContext(AuthenticationContext);

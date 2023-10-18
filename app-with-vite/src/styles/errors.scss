@@ -1,0 +1,20 @@
+
+.error-page {
+    @include centered;
+    section {
+        align-self: center;
+        width: fit-content;
+        height: fit-content;
+        padding: 3em;
+        background-color: var(--accent-background);
+        border-radius: var(--border-radius);
+
+        h1 {
+            font-size: 2em;
+            padding-bottom: 1em;
+        }
+        h1, p {
+            text-align: center;
+        }
+    }
+}
