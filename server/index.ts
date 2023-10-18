@@ -20,8 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/", async (req: Request, res: Response) => {
-    await getUsers();
-    res.send("server running...");
+    // for testing purposes
+    const users = await getUsers();
+    // res.send("server running...");
+    res.json(users);
 });
 
 app.post("/auth", authenticateToken, async (req: Request, res: Response) => {

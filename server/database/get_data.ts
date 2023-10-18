@@ -7,10 +7,15 @@ import { ConversationType } from "../types/conversation_types";
 import { MessageType } from "../types/message_types";
 
 export const getUsers = async () => {
+    const users: UserType[] = [];
     const snapshot = await db.collection("users").get();
     snapshot.forEach((doc) => {
         console.log(doc.id, "=>", doc.data());
+        users.push({
+            ...(doc.data() as UserType)
+        });
     });
+    return users;
 };
 
 
