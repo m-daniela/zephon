@@ -10,7 +10,7 @@ export type AuthContextType = {
     token: AuthTokenType, 
     email: string,
     login: (newToken: string, userEmail: string) => void
-    logout: () => void
+    logout: () => void, 
 }
 
 export const AuthenticationContext = createContext<AuthContextType>({} as AuthContextType);
@@ -23,6 +23,7 @@ export const AuthenticationContext = createContext<AuthContextType>({} as AuthCo
  * @returns 
  */
 const AuthenticationProvider = ({children}: Props) => {
+    // TODO: cleanup the states
     const [token, setToken] = useState<AuthTokenType>(Cookies.get("token"));
     const [email, setEmail] = useState<string>(Cookies.get("email") ?? "");
 
