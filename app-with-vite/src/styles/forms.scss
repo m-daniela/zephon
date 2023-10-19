@@ -5,6 +5,19 @@ button {
   border: none;
   cursor: pointer;
 }
+button {
+  
+  font-size: 1em;
+  border-radius: var(--border-radius);
+
+  &.primary {
+    padding: 1em .7em;
+    background-color: var(--accent-background);
+    &:hover{
+      background-color: var(--primary-background);
+    }
+  }
+}
 
 input,
 input:required {
@@ -62,6 +75,7 @@ label {
 
   input {
     @include custom_input;
+    background-color: transparent;
     margin-left: 0;
     margin-right: 0;
     &:focus {

@@ -1,0 +1,66 @@
+
+.left, .right {
+    // flex-grow: 1;
+    flex-basis: 30%;
+    background-color: var(--secondary-background);
+}
+
+.messages {
+    flex-basis: 40%;
+    // flex-grow: 2;
+}
+
+.options {
+    height: 60px;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--highlights);
+    button {
+        padding: 0 6px;
+    }
+}
+
+.left {
+    box-sizing: border-box;
+    .conversations {
+        padding: 1.2em;
+        .conversation-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5em .7em;
+            margin: 1em 0;
+            background-color: var(--accent-background);
+            border-radius: var(--border-radius);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover {
+                cursor: pointer;
+                background-color: var(--primary-background);
+            }
+        }
+
+        form {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            h2 {
+                margin-bottom: .7em;
+            }
+            input {
+                // max-width: 50%;
+                margin-left: 0;
+                margin-right: 0;
+                padding: 5px;
+            }
+            .added-participants {
+                margin: 1em 0;
+                max-height: 200px;
+                overflow-y: scroll;
+            }
+
+            button.primary {
+                margin: 1em 0;
+            }
+        }
+    }
+}
