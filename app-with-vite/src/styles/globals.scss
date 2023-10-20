@@ -4,11 +4,10 @@
 @import "./forms.scss";
 @import "./errors.scss";
 @import "./main_page.scss";
-@import "./chakra_overrides.scss";
 
 
 :root{
-  --max-width: 1100px;
+  --max-width: 1500px;
   --border-radius: 5px;
 
   --primary-background: #181818;
@@ -67,14 +66,32 @@ body {
 }
 
 main {
+  box-sizing: content-box;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
-  // max-width: var(--max-width);
+  max-width: var(--max-width);
+  margin: auto;
   width: 100vw;
   height: 100vh;
   section {
     height: 100%;
   }
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+svg {
+  align-self: center;
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: dark) {

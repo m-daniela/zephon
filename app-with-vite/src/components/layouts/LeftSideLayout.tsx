@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { EmailIcon, AddIcon } from "@chakra-ui/icons";
-import { HStack, IconButton } from "@chakra-ui/react";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import Conversations from "../conversations/Conversations";
 import AddConversation from "../conversations/AddConversation";
 
@@ -29,8 +29,9 @@ const LeftSideLayout: React.FC = (): React.JSX.Element => {
      * @param displayId button id 
      */
     const handleDisplaySection = (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>, displayId: string) => {
+        e: React.MouseEvent<SVGSVGElement, MouseEvent>, displayId: string) => {
         e.preventDefault();
+        console.log(e.target);
         setDisplay(state => {
             const stateCopy: HeaderButtonsType = {...state};
             for (const property in stateCopy) {
@@ -42,16 +43,14 @@ const LeftSideLayout: React.FC = (): React.JSX.Element => {
     };
     return (
         <section className="left">
-            <HStack className="options">
-                <IconButton 
-                    aria-label="Conversations" 
-                    icon={<EmailIcon boxSize={25}/>} 
-                    onClick={(e) => handleDisplaySection(e, "conversationsButton")}/>
-                <IconButton 
-                    aria-label="Add Conversation" 
-                    icon={<AddIcon boxSize={20}/>} 
-                    onClick={(e) => handleDisplaySection(e, "addConversationsButton")}/>
-            </HStack>
+            <section className="options horizontal">
+                <MailOutlineRoundedIcon
+                    onClick={(e) => handleDisplaySection(e, "conversationsButton")}
+                />
+                <AddRoundedIcon 
+                    onClick={(e) => handleDisplaySection(e, "addConversationsButton")}
+                />
+            </section>
             <section className="conversations add-conversation">
                 {display.conversationsButton && <Conversations />}
                 {display.addConversationsButton && <AddConversation />}

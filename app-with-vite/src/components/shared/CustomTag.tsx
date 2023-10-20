@@ -1,4 +1,4 @@
-import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
+import Chip from "@mui/material/Chip";
 import React from "react";
 
 type Props = {
@@ -17,13 +17,7 @@ type Props = {
 const CustomTag: React.FC<Props> = ({text, removeTag}: Props): React.JSX.Element => {
     if (!removeTag) {
         return (
-            <Tag
-                borderRadius='full'
-                variant='solid'
-                colorScheme='grey'
-            >
-                <TagLabel>{text}</TagLabel>
-            </Tag>
+            <Chip label={text} variant="outlined" />
         );
     }
     const handleRemoveTag = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -31,15 +25,7 @@ const CustomTag: React.FC<Props> = ({text, removeTag}: Props): React.JSX.Element
         removeTag(text);
     };
     return (
-        <Tag
-            size="md"
-            borderRadius='full'
-            variant='solid'
-            className="tag"
-        >
-            <TagLabel>{text}</TagLabel>
-            <TagCloseButton onClick={handleRemoveTag}/>
-        </Tag>
+        <Chip label={text} variant="outlined" onDelete={handleRemoveTag} />
     );
 };
 
