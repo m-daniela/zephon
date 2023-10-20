@@ -1,0 +1,97 @@
+
+.left, .right {
+    // flex-grow: 1;
+    flex-basis: 30%;
+    background-color: var(--secondary-background);
+}
+
+.messages {
+    flex-basis: 40%;
+    // flex-grow: 2;
+}
+
+.options {
+    height: 60px;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--highlights);
+    svg {
+        align-self: center;
+        font-size: 2em;
+        margin: 0 6px;
+    }
+}
+
+.left {
+    box-sizing: border-box;
+    .conversations {
+        padding: 1.2em;
+        // overflow-y: scroll;
+        .conversation-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5em .7em;
+            margin: 1em 0;
+            background-color: var(--accent-background);
+            border-radius: var(--border-radius);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover {
+                cursor: pointer;
+                background-color: var(--primary-background);
+            }
+        }
+
+        form {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            h2 {
+                margin-bottom: .7em;
+            }
+            input {
+                // max-width: 50%;
+                margin-left: 0;
+                margin-right: 0;
+                padding: 5px;
+            }
+            .added-participants {
+                margin: 1em 0;
+                max-height: 200px;
+                overflow-y: scroll;
+                div {
+                    display: flex;
+                    justify-content: space-between;
+                    border-radius: var(--border-radius);
+                    border-color: var(--highlights);
+                    padding: 5px 0;
+                    margin-bottom: 10px;
+
+                    span, svg {
+                        color: var(--primary-font);
+                    }
+                }
+                
+            }
+
+            button.primary {
+                margin: 1em 0;
+            }
+
+            .encryption-checkbox {
+                cursor: pointer;
+                margin: .7em 0 0 0;
+                justify-content: left;
+                &>* {
+                    margin: 0;
+                    padding: 0;
+                    width: fit-content;
+                }
+                input {
+                    padding: 15px;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
