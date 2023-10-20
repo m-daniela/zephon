@@ -14,8 +14,10 @@
     height: 60px;
     padding: 10px 15px;
     border-bottom: 1px solid var(--highlights);
-    button {
-        padding: 0 6px;
+    svg {
+        align-self: center;
+        font-size: 2em;
+        margin: 0 6px;
     }
 }
 
@@ -23,6 +25,7 @@
     box-sizing: border-box;
     .conversations {
         padding: 1.2em;
+        // overflow-y: scroll;
         .conversation-item {
             display: flex;
             justify-content: space-between;
@@ -56,10 +59,38 @@
                 margin: 1em 0;
                 max-height: 200px;
                 overflow-y: scroll;
+                div {
+                    display: flex;
+                    justify-content: space-between;
+                    border-radius: var(--border-radius);
+                    border-color: var(--highlights);
+                    padding: 5px 0;
+                    margin-bottom: 10px;
+
+                    span, svg {
+                        color: var(--primary-font);
+                    }
+                }
+                
             }
 
             button.primary {
                 margin: 1em 0;
+            }
+
+            .encryption-checkbox {
+                cursor: pointer;
+                margin: .7em 0 0 0;
+                justify-content: left;
+                &>* {
+                    margin: 0;
+                    padding: 0;
+                    width: fit-content;
+                }
+                input {
+                    padding: 15px;
+                    margin-right: 5px;
+                }
             }
         }
     }

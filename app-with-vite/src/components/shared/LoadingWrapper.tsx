@@ -1,6 +1,6 @@
 import React from "react";
 import { ChildrenPropsType } from "../../utils/types/utils";
-import { Spinner } from "@chakra-ui/react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Props = ChildrenPropsType & {
     isLoading: boolean, 
@@ -21,7 +21,7 @@ const LoadingWrapper: React.FC<Props> = ({ isLoading, errorMessage, children}: P
         <>
             {
                 isLoading ?
-                    <Spinner />
+                    <CircularProgress />
                     :
                     <>
                         {

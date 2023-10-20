@@ -1,11 +1,9 @@
-import { HStack, VStack, Checkbox } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import {AddIcon} from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { useAuthContext } from "../../utils/hooks";
 import { CreateConversationType } from "../../utils/types/conversation_types";
 import { addConversationCall } from "../../utils/apiCalls/conversation_operations";
 import { handleApiResponse } from "../../utils/functions";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CustomTag from "../shared/CustomTag";
 
 
@@ -32,7 +30,7 @@ const AddConversation: React.FC = (): React.JSX.Element => {
         setParticipant(e.target.value);
     };
 
-    const handleAddParticipant = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    const handleAddParticipant = (e: React.MouseEvent<SVGSVGElement, MouseEvent>): void => {
         e.preventDefault();
         setConversation(state => {
             if (!state.participants.includes(participant)){
@@ -71,6 +69,7 @@ const AddConversation: React.FC = (): React.JSX.Element => {
                 isEncrypted: !state.isEncrypted
             };
         });
+        console.log(123);
     };
 
     const handleCreateConversation = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -92,39 +91,31 @@ const AddConversation: React.FC = (): React.JSX.Element => {
                 placeholder="Conversation name..."
                 onChange={handleSetName}/>
             <label>Add participants</label>
-            <HStack>
+            <div className="horizontal">
                 <input 
                     type="text" 
                     value={participant} 
                     placeholder="Participant email..."
                     onChange={handleSetParticipant}/>
-                <IconButton 
-                    aria-label="Add Participant" 
-                    icon={<AddIcon />}
-                    onClick={handleAddParticipant}/>
-            </HStack>
-            <VStack 
-                className="added-participants"
-                spacing="10px"
-                align={"left"}
-            >
-                <CustomTag 
-                    key={participant} 
-                    text={email} 
-                />
+                <AddRoundedIcon onClick={handleAddParticipant}/>
+            </div>
+            <div className="added-participants vertical">
+                <CustomTag key={participant} text={email} />
                 {
-                    conversation.participants.map(participant => <CustomTag 
+                    conversation.participants.map(participant => <CustomTag
                         key={participant} 
                         text={participant} 
-                        removeTag={handleRemoveParticipant}/>)
+                        removeTag={handleRemoveParticipant} /> )
                 }
-            </VStack>
-                
-            <Checkbox 
-                defaultChecked
-                isChecked={conversation.isEncrypted}
-                onChange={handleSetIsEncrypted}>
-                        Ecrypted conversation</Checkbox>
+            </div>
+            <label className="encryption-checkbox horizontal">
+                <input 
+                    type="checkbox"
+                    value="Encrypted"
+                    checked={conversation.isEncrypted}
+                    onChange={handleSetIsEncrypted} />
+                Encrypted
+            </label>
             <p>{error}</p>
             <button type="submit" className="primary">Create conversation</button>
         </form>
