@@ -1,15 +1,14 @@
-import { Link } from "react-router-dom";
-import { useAuthContext } from "./utils/hooks";
-// import "./App.css";
+import LeftSideLayout from "./components/layouts/LeftSideLayout";
+import MessagesLayout from "./components/layouts/MessagesLayout";
+import RightSideLayout from "./components/layouts/RightSideLayout";
 
 function App() {
-    const {logout} = useAuthContext();
     return (
-        <section>
-            <p>Vite app home</p>
-            <Link to={"login"}>Go to login</Link>
-            <button onClick={logout}>Logout</button>
-        </section>
+        <>
+            <LeftSideLayout />
+            <MessagesLayout />
+            <RightSideLayout />
+        </>
     );
 }
 

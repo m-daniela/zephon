@@ -3,6 +3,8 @@
 @import "./utils.scss";
 @import "./forms.scss";
 @import "./errors.scss";
+@import "./main_page.scss";
+@import "./chakra_overrides.scss";
 
 
 :root{
@@ -12,7 +14,7 @@
   --primary-background: #181818;
   --primary-font: #faf1e7cc;
   --secondary-background: #080808a1;
-  --accent-background: #131313;
+  --accent-background: #232323;
   --message-background: #222222;
   --message-background-current: #111;
   --input-background: #3030307c;
@@ -65,7 +67,10 @@ body {
 }
 
 main {
-  max-width: var(--max-width);
+  display: flex;
+  flex-direction: row;
+  // max-width: var(--max-width);
+  width: 100vw;
   height: 100vh;
   section {
     height: 100%;
